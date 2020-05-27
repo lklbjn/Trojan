@@ -41,19 +41,19 @@ function displayInstallItems(){
 			display="${display}\n  1. 更新软件源"
 			display="${display}\n  apt-get update"
 			;;
-		bbr )
-			display="${display}\n  2. 开启BBR加速"
+		bbrplus )
+			display="${display}\n  2. 开启BBRplus加速"
 			display="${display}\n  echo \"net.core.default_qdisc=fq\" >> /etc/sysctl.conf"
-			display="${display}\n  echo \"net.ipv4.tcp_congestion_control=bbr\" >> /etc/sysctl.conf"
+			display="${display}\n  echo \"net.ipv4.tcp_congestion_control=bbrplus\" >> /etc/sysctl.conf"
 			display="${display}\n  sysctl -p"
 			display="${display}\n\n  -------------------------"
 			display="${display}  检查运行状态"
 			display="${display}  -------------------------"
-			display="${display}\n  lsmod | grep bbr"
+			display="${display}\n  lsmod | grep bbrplus"
 			display="${display}\n\n  -------------------------"
-			display="${display}  BBR一键安装代码（备用）"
+			display="${display}  BBRplus一键安装代码（备用）"
 			display="${display}  -------------------------"
-			display="${display}\n  wget -N --no-check-certificate \"https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh && chmod +x tcp.sh && ./tcp.sh\""
+			display="${display}\n  wget -N --no-check-certificate \"https://raw.githubusercontent.com/lklbjn/Emby/master/tcp.sh && chmod +x tcp.sh && ./tcp.sh\""
 			;;
 		needfulSofts )
 			display="${display}\n  3. 安装必要软件"
@@ -235,13 +235,13 @@ function displayConfigs(){
     esac
 }
 
-function install_bbr(){
+function install_bbrplus(){
 	echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
-	echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+	echo "net.ipv4.tcp_congestion_control=bbrplus" >> /etc/sysctl.conf
 	sysctl -p
-	if [ -z "$(lsmod | grep bbr)" ]; then
+	if [ -z "$(lsmod | grep bbrplus)" ]; then
 		read -p "首选安装：7. 使用BBRplus版加速"
-		wget -N --no-check-certificate "https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
+		wget -N --no-check-certificate "https://raw.githubusercontent.com/lklbjn/Emby/master/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
 	fi
 }
 
@@ -403,9 +403,9 @@ function install_all(){
 	set -x
 	apt-get update
 	set +x
-	displayInstallItems bbr
+	displayInstallItems bbrplus
 	set -x
-	install_bbr
+	install_bbrplus
 	set +x
 	displayInstallItems needfulSofts
 	set -x
@@ -479,12 +479,12 @@ function action(){
 			set -x
 		    apt-get update
 			set +x
-			yes_or_no "是否继续下一步：2. 开启BBR加速" "menu $(($1 + 1))" "exit 1"
+			yes_or_no "是否继续下一步：2. 开启BBRplus加速" "menu $(($1 + 1))" "exit 1"
 			;;
 		2)
-			displayInstallItems bbr
+			displayInstallItems bbrplus
 			set -x
-			install_bbr
+			install_bbrplus
 			set +x
 			yes_or_no "是否继续下一步：3. 安装必要软件" "menu $(($1 + 1))" "exit 1"
 			;;
@@ -583,7 +583,7 @@ function menu(){
 	display="${display}\n${COLORS_END}"
 	display="${display}${THINGREEN}\n"
 	display="${display}  1. 更新软件源\n"
-	display="${display}  2. 开启BBR加速\n"
+	display="${display}  2. 开启BBRplus加速\n"
 	display="${display}  3. 安装必要软件\n"
 	display="${display}  4. 申请Letsencrypt证书（需要确保80端口已开放并且不被占用）\n"
 	display="${display}  5. 部署Nginx\n"
