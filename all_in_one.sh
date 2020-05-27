@@ -240,7 +240,7 @@ function install_bbrplus(){
 	echo "net.ipv4.tcp_congestion_control=bbrplus" >> /etc/sysctl.conf
 	sysctl -p
 	if [ -z "$(lsmod | grep bbrplus)" ]; then
-		read -p "首选安装：7. 使用BBRplus版加速"
+		read -p "首选安装：7. 使用BBRplus加速"
 		wget -N --no-check-certificate "https://raw.githubusercontent.com/lklbjn/Emby/master/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
 	fi
 }
